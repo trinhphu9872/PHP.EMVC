@@ -6,8 +6,8 @@
 					<?php echo $title; ?>
 				</h3>
 				<?php
-				for ($i=0; $i < count($data); $i++){
-					?>
+				for ($i = 0; $i < count($data); $i++) {
+				?>
 					<div class='product-container' onclick="Display_PrdDetail('<?php echo $data[$i]['masp'] ?>')">
 						<a data-toggle='modal' href='product/PrdDetail/<?php echo $data[$i]['masp'] ?>' data-target='#modal-id'>
 							<div style="text-align: center;" class='product-img'>
@@ -18,23 +18,23 @@
 								<b class='price'>Giá: <?php echo $data[$i]['gia']; ?> VND</b>
 								<div class='buy'>
 									<a class='btn btn-primary btn-md cart-container <?php
-									if(isset($_SESSION['cart'])){
-										if(array_search($data[$i]['masp'], $_SESSION['cart']) !== false){
-											echo 'cart-ordered';
-										}
-									} ?>' data-masp='<?php echo $data[$i]['masp'] ?>' >
-									<i title='Thêm vào giỏ hàng' class='glyphicon glyphicon-shopping-cart cart-item'></i>
-								</a>
-								<a href="client/buynow/<?php echo $data[$i]['masp'] ?>" class="snip0050"><span>Mua ngay</span><i class="glyphicon glyphicon-ok"></i>
-								</a>
+																					if (isset($_SESSION['cart'])) {
+																						if (array_search($data[$i]['masp'], $_SESSION['cart']) !== false) {
+																							echo 'cart-ordered';
+																						}
+																					} ?>' data-masp='<?php echo $data[$i]['masp'] ?>'>
+										<i title='Thêm vào giỏ hàng' class='glyphicon glyphicon-shopping-cart cart-item'></i>
+									</a>
+									<a href="client/buynow/<?php echo $data[$i]['masp'] ?>" class="snip0050"><span>Mua ngay</span><i class="glyphicon glyphicon-ok"></i>
+									</a>
+								</div>
 							</div>
-						</div>
-					</a>
-				</div>
+						</a>
+					</div>
 				<?php } ?>
 			</div>
 		</div>
-	</div>	
+	</div>
 </div>
 <div class="container-fluid text-center" style="padding: 15px;">
 	<div class="row">
@@ -45,15 +45,15 @@
 </div>
 <script type="text/javascript">
 	var cr = $('#contentTitle').data('type');
-	switch(cr){
+	switch (cr) {
 		case 'onsale':
-			$('#dgg').css('background-color','black');
+			$('#dgg').css('background-color', 'black');
 			break;
 		case 'newest':
-			$('#spm').css('background-color','black');
+			$('#spm').css('background-color', 'black');
 			break;
 		case 'bestselling':
-			$('#mntq').css('background-color','black');
+			$('#mntq').css('background-color', 'black');
 			break;
 	}
 </script>

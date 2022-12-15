@@ -26,6 +26,7 @@ class Model
 		$value = rtrim(implode(',', $value), ',');
 
 		$sql = "INSERT INTO " . $table . " (" . $row . ") VALUES (" . $value . ")";
+
 		$stmt = $this->conn->prepare($sql);
 		try {
 			if ($stmt->execute()) {
@@ -49,6 +50,7 @@ class Model
 			$set = rtrim($set, ',');
 			$sql = "UPDATE " . $table . " SET " . $set . " WHERE " . $cond . "";
 		}
+		// echo $sql;
 		$stmt = $this->conn->prepare($sql);
 		try {
 			if ($stmt->execute()) {
@@ -79,13 +81,29 @@ class Model
 		} else {
 			$sql = "SELECT " . $what . " FROM " . $table . " WHERE " . $cond . " " . $option;
 		}
+		// echo $sql;
 		$stmt = $this->conn->prepare($sql);
 		$stmt->execute();
 		return $stmt->fetchAll();
 	}
+
+
+	function selectTop($what, $table, $cond = null, $option = null)
+	{
+		if ($cond == '') {
+			$sql = "SELECT " . $what . " FROM " . $table . " " . $option;
+		} else {
+			$sql = "SELECT " . $what . " FROM " . $table . " WHERE " . $cond . " " . $option;
+		}
+		// echo $sql;
+		$stmt = $this->conn->prepare($sql);
+		$stmt->execute();
+		return $stmt->fetch(PDO::FETCH_ASSOC);
+	}
 	function exe_query($sql)
 	{
 		$stmt = $this->conn->prepare($sql);
+		// echo $sql;
 		try {
 			$r = $stmt->execute();
 		} catch (PDOException $e) {
@@ -94,7 +112,7 @@ class Model
 		}
 		return $r;
 	}
-	function getListMasp($sql)
+	function getListMasp($sql = null)
 	{
 		$result = null;
 		$stmt = $this->conn->prepare($sql);

@@ -8,7 +8,7 @@ if (isset($_COOKIE['user']) && !isset($_SESSION['user'])) {
 <head>
 	<title> Shop check đồng hồ uy tín </title>
 	<meta charset="utf-8">
-	<base href="/WBH_MVC/">
+	<base href="/PHP.EMVC/">
 	<!-- <link rel="SHORTCUT ICON"  href=> -->
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="public/css/style.css">
@@ -35,10 +35,10 @@ if (isset($_COOKIE['user']) && !isset($_SESSION['user'])) {
 			<?php
 			if ((!isset($_SESSION['user']))) { ?>
 				<!-- if(($_SESSION['user']) == ""){ ?> -->
-				<li><a href="index/signin" id="s-s" data-stt='nosignin'>Đăng nhập</a>
+				<li><a href="User/signin" id="s-s" data-stt='nosignin'>Đăng nhập</a>
 					<div class='mn-ef'></div>
 				</li>
-				<li><a href="index/signup">Đăng ký</a>
+				<li><a href="User/signup">Đăng ký</a>
 					<div class='mn-ef'></div>
 				</li>
 			<?php } else { ?>
@@ -47,15 +47,16 @@ if (isset($_COOKIE['user']) && !isset($_SESSION['user'])) {
 				</li>
 				<div id='user-setting'>
 					<ul>
-						<a href="user/logout">
-							<li>Đăng xuất</li>
-						</a>
 						<a href="user/viewinfo">
 							<li onclick="$('#user-setting').toggle()">Thông tin tài khoản</li>
 						</a>
-						<a href="user/vieweditpassword">
-							<li>Đổi mật khẩu</li>
+						<a href="user/orderDonHang">
+							<li onclick="$('#user-setting').toggle()">Xem đơn hàng</li>
 						</a>
+						<a href="user/logout">
+							<li>Đăng xuất</li>
+						</a>
+
 					</ul>
 				</div>
 			<?php }
@@ -99,7 +100,7 @@ if (isset($_COOKIE['user']) && !isset($_SESSION['user'])) {
 					<li class="dropdown menu-name">
 						<a class="dropdown-toggle" data-toggle="dropdown" style="cursor: pointer;">Danh mục sản phẩm <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="product/List/All">Tất cả sản phẩm</a></li>
+
 							<?php
 							require_once 'vendor/Model.php';
 							require_once 'models/admin/categoryModel.php';

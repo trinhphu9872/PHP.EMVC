@@ -7,16 +7,19 @@ class categoryModel extends Model
 	{
 		parent::__construct();
 	}
-	function getAllCtgrs()
+	public function getAll()
 	{
-		$rs = $this->select('*', 'category', null, 'ORDER BY madm DESC');
-		for ($i = 0; $i < count($rs); $i++) {
-			$tmp = $this->select('count(masp)', 'category dm, product sp', 'dm.madm = sp.madm AND dm.madm = ' . $rs[$i]['madm']);
-			$sum[] = $tmp[0]['count(masp)'];
-		}
-		for ($i = 0; $i < count($rs); $i++) {
-			$rs[$i]['tongsp'] = $sum[$i];
-		}
+
+		$categoryAll = $this->select('*', 'category', null, 'ORDER BY id_category DESC');
+		//$sumCategory = $this->select('dm.id_category, count(sp.id_product) as sumProduct','category dm, product sp', 'dm.id_category = sp.id_category', 'GROUP BY dm.id_category ORDER BY dm.id_category DESC' )
+
+
+		return $categoryAll;
+	}
+
+	public function getName($id)
+	{
+		$rs = $this->select('*', 'category', 'id_category =' . $id, 'ORDER BY id_category DESC');
 		return $rs;
 	}
 }

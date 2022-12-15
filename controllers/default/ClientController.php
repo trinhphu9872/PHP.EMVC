@@ -16,16 +16,49 @@ class ClientController extends Controller
 		require_once 'models/default/productModel.php';
 		$md = new productModel;
 		$data[] = array();
+		$dataGet[] = [];
+		$dataCloud = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+		// $_SESSION['cart'] = [];
+		if (!empty($_SESSION['user'])) {
+			# code...
+			// $_SESSION['cart'] = [];
+			$dataGet = $md->select('masp,soluong', 'giohang', 'user_id = ' . $_SESSION['user']['id']);
+			// print_r($dataGet);
+		}
 
-		if (isset($_SESSION['cart'])) {
+		//var_dump($dataGet);
+
+
+
+		if (!isset($_SESSION['user'])) {
 			$title = "Giỏ hàng của bạn:";
-			for ($i = 0; $i < count($_SESSION['cart']); $i++) {
-				$data[] = $md->getPrdById($_SESSION['cart'][$i]);
+
+			if ($_SESSION['cart'] != []) {
+				for ($i = 0; $i < count($_SESSION['cart']); $i++) {
+					$data[$i] = $md->getPrdById($_SESSION['cart'][$i]);
+					$data[$i]['soluong'] = $dataCloud[$i];
+					// $data[$i]['soluong'] = 1;
+				} # code...
+			} else {
+				$data = null;
+			}
+		} else if (isset($_SESSION['cart']) && $dataGet != []) {
+			$title = "Giỏ hàng của bạn từ database:";
+			// $_SESSION['cart'] = [];
+			for ($i = 0; $i < count($dataGet); $i++) {
+				$data[$i] = $md->getPrdById($dataGet[$i]['masp']);
+				$data[$i]['soluong'] = $dataGet[$i]['soluong'];
+				// $data[$i]->soluong =  $dataGet[$i]['soluong'];
+				//  array_push($data, $dataGet[$i]['soluong']);
+
 			}
 		} else {
+			$data = null;
 			$title = "<span class='glyphicon glyphicon-alert' style='color: #c1ac13'></span> Giỏ hàng của bạn trống!";
 		}
 
+		// print_r($dataGet);
+		// print_r($data);
 		$this->render('cart', $data, $title);
 	}
 	function buynow($masp)
@@ -87,6 +120,40 @@ class ClientController extends Controller
 		}
 		echo " " . count($_SESSION['cart']);
 	}
+
+	function orderClone()
+	{
+		require_once 'vendor/Model.php';
+		require_once 'models/default/productModel.php';
+		$md = new productModel;
+		$data[] = array();
+		$num = 0;
+
+
+		if (isset($_POST['num'])) {
+			$num = $_POST['num'];
+			$_SESSION['num'] = $num;
+		}
+		//  else {
+		// 	$num = [1, 1, 1, 1, 1, 1, 1, 1];
+		// 	$_SESSION['num'] = $num;
+		// }
+		$title = 0;
+
+
+
+		if (isset($_SESSION['cart'])) {
+
+			for ($i = 0; $i < count($_SESSION['cart']); $i++) {
+				$sql = "UPDATE giohang SET  masp = '" . $_SESSION['cart'][$i] . "',soluong =" . $_SESSION['num'][$i] . " WHERE user_id = '" . $_SESSION['user']['id'] . "' and  masp ='" . $_SESSION['cart'][$i] . "' ";
+				echo $sql;
+				echo "</br>";
+				echo $md->exe_query($sql);
+			}
+		}
+	}
+
+
 	function order()
 	{
 		require_once 'vendor/Model.php';
@@ -147,7 +214,12 @@ class ClientController extends Controller
 			$row = $md->getPrdById($sp[$i]);
 			$tt += $num[$i] * intval(preg_replace('/\s+/', '', $row['gia']));
 		}
-		$sql = "INSERT INTO giaodich(tinhtrang,user_name,user_dst,user_addr,user_phone,tongtien,date) VALUES (0,'" . $ten . "','" . $quan . "','" . $dc . "','" . $sdt . "','" . $tt . "',NOW())";
+
+		if (isset($_SESSION['user'])) {
+			$sql = "INSERT INTO giaodich(tinhtrang,user_id,user_name,user_dst,user_addr,user_phone,tongtien,date) VALUES (0,'" . $_SESSION['user']['id'] . "','" . $ten . "','" . $quan . "','" . $dc . "','" . $sdt . "','" . $tt . "',NOW())";
+		} else {
+			$sql = "INSERT INTO giaodich(tinhtrang,user_name,user_dst,user_addr,user_phone,tongtien,date) VALUES (0,'" . $ten . "','" . $quan . "','" . $dc . "','" . $sdt . "','" . $tt . "',NOW())";
+		}
 		$rs = $md->exe_query($sql);
 		if ($rs) {
 			$last_id = $md->getLastInsertID();
@@ -170,7 +242,7 @@ class ClientController extends Controller
 		require_once 'models/default/productModel.php';
 		require_once 'models/admin/categoryModel.php';
 		$ctgr = new categoryModel;
-		$allCtgrs = $ctgr->getAllCtgrs();
+		$allCtgrs = $ctgr->getAll();
 		$md = new productModel;
 		$q = "";
 		if (isset($_GET['q'])) {

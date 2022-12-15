@@ -9,43 +9,44 @@
   <div class="row">
     <div class="col-xs-12">
       <div class="box">
+
         <!-- /.box-header -->
         <div class="box-body">
-          <i id="addError" style="color: red"></i>
+
           <div class="container" style="margin: 10px 0;">
             <span class="btn btn-primary glyphicon glyphicon-plus btn-sm" id="addBtn"></span>
           </div>
           <div class="container" id="addArea" style="width: 100%; display: none; padding-bottom: 10px;">
-            <form action="" method="POST" role="form">
+            <form action="Admin/category/createCategory" method="POST" role="form">
               <legend>Thêm danh mục</legend>
               <i id="addError" style="color: red"></i>
               <div class="form-group">
                 <label for="">Tên danh mục</label>
-                <input type="text" class="form-control" id="categoryName">
+                <input type="text" class="form-control" name="categoryName" required>
               </div>
               <div class="form-group">
                 <label for="">Quốc gia</label>
-                <input type="text" class="form-control" id="categoryCountry">
+                <input type="text" class="form-control" name="categoryCountry" required>
               </div>
 
-              <span class="btn btn-success" id="add2Btn">Thêm</span>
+              <button class="btn btn-success">Thêm</button>
               <span class="btn btn-default" id="cancelAddBtn">Hủy</span>
             </form>
           </div>
           <div class="container" id="editArea" style="width: 100%; display: none; padding-bottom: 10px;">
-            <form action="" method="POST" role="form">
+            <form action="Admin/category/editCategory" method="POST" role="form">
               <legend>Sửa danh mục</legend>
-              <i id="addError" style="color: red"></i>
+              <input type="hidden" value="" id="categoryEdit" name="id">
               <div class="form-group">
                 <label for="">Tên danh mục</label>
-                <input type="text" class="form-control" id="categoryName4Edit">
+                <input type="text" class="form-control" name="categoryName" id="categoryName4Edit" required>
               </div>
               <div class="form-group">
                 <label for="">Quốc gia</label>
-                <input type="text" class="form-control" id="categoryCountry4Edit">
+                <input type="text" class="form-control" name="categoryCountry" id="categoryCountry4Edit" required>
               </div>
 
-              <span class="btn btn-success" id="edit2Btn">Xong</span>
+              <button class="btn btn-success" id="edit2Btn">Xong</button>
               <span class="btn btn-default" id="cancelEditBtn">Hủy</span>
             </form>
           </div>
@@ -56,13 +57,12 @@
                 <th>Mã danh mục</th>
                 <th>Tên danh mục</th>
                 <th>Quốc gia</th>
-                <th>Tổng sản phẩm</th>
                 <th>Hành động</th>
               </tr>
             </thead>
             <tbody>
-              <?php
-              for ($i = 0; $i < count($data); $i++) { ?>
+              <!-- <?php
+                    for ($i = 0; $i < count($data); $i++) { ?>
                 <tr>
                   <td><?php echo $i + 1 ?></td>
                   <td><?php echo $data[$i]['madm'] ?></td>
@@ -75,7 +75,20 @@
                   </td>
                 </tr>
               <?php }
-              ?>
+              ?> -->
+              <?php $index = 0; ?>
+              <?php foreach ($data as $item) : ?>
+                <tr>
+                  <td><?php echo $index + 1 ?></td>
+                  <td><?php echo $item['id_category'] ?></td>
+                  <td><?php echo $item['name_category'] ?></td>
+                  <td><?php echo $item['origin_category'] ?></td>
+                  <td class="text-center">
+                    <span class="btn btn-primary editItemBtn" data-id='<?php echo $item['id_category'] ?>'>Chỉnh sửa</span>
+                    <span class="btn btn-danger delItemBtn" data-id='<?php echo $item['id_category'] ?>'>Xóa</span>
+                  </td>
+                </tr>
+              <?php endforeach; ?>
             </tbody>
           </table>
         </div>
@@ -126,24 +139,26 @@
   $('#cancelAddBtn').on('click', function() {
     $('#addArea').toggle(300);
   })
-  $('#add2Btn').on('click', function() {
-    action('add', );
-  })
-  $('#edit2Btn').on('click', function() {
-    var id = $(this).data('id');
-    action('edit', id);
-  })
+  // $('#add2Btn').on('click', function() {
+  //   action('add', );
+  // })
+  // $('#edit2Btn').on('click', function() {
+  //   var id = $(this).data('id');
+  //   action('edit', id);
+  // })
   $('.delItemBtn').on('click', function() {
     var cf = confirm('Bạn chắc chứ?');
     if (cf) {
       var id = $(this).data('id');
-      action('del', id);
+      actionDelete(id);
     }
   })
   $('.editItemBtn').on('click', function() {
     $('#edit2Btn').attr('data-id', $(this).data('id'));
     $('#example1').toggle();
     $('#editArea').toggle(300);
+    // $('#categoryEdit').val($(this).closest('te').children('td:nth-child(2)').text())
+    $('#categoryEdit').val($(this).closest('tr').children('td:nth-child(2)').text());
     $('#categoryName4Edit').val($(this).closest('tr').children('td:nth-child(3)').text());
     $('#categoryCountry4Edit').val($(this).closest('tr').children('td:nth-child(4)').text());
   })
@@ -152,36 +167,21 @@
     $('#editArea').toggle(300);
   })
 
-  function action(name, id = null) {
-    var name4edit = $('#categoryName4Edit').val();
-    var country4edit = $('#categoryCountry4Edit').val();
-    var cname = ccountry = '';
-    if (name == 'add') {
-      cname = $('#categoryName').val();
-      ccountry = $('#categoryCountry').val();
-      if (cname == '') {
-        alert('Bạn chưa điền tên danh mục!');
-        return;
-      }
-    }
+  function actionDelete(id) {
     $.ajax({
-      url: 'category/action',
-      type: 'GET',
+      url: 'category/deleteCategory',
+      type: 'POST',
       dataType: 'text',
       data: {
-        name,
-        id,
-        cname,
-        ccountry,
-        name4edit,
-        country4edit
+        id
       },
       success: function(result) {
-        if (result == 'OK') {
-          alert("Successful!");
+        if (result != 'OK') {
+          alert(result);
           location.reload();
         } else {
-          $('#addError').html(result);
+          alert("Xoá thành công");
+          location.reload();
         }
       }
     })

@@ -42,15 +42,12 @@
                 <label for="">SDT</label>
                 <input type="text" class="form-control" id="tel">
               </div>
-              <div class="form-group">
-                <label for="">Email</label>
-                <input type="text" class="form-control" id="email">
-              </div>
+
 
               <label for="role">Vị trí</label>
               <select class="form-control my-1" id="role">
                 <option value="0">Người dùng</option>
-                <option value="1">Người quản trị</option>
+
                 <option value="2">Người bán hàng</option>
 
               </select>
@@ -68,38 +65,51 @@
                 <th>Vị trí</th>
                 <th>Địa chỉ</th>
                 <th>Số điện thoại</th>
-                <th>Email</th>
+                <th>Trạng thái</th>
                 <th>Ngày tham gia</th>
                 <th>Hành động</th>
               </tr>
             </thead>
             <tbody>
-              <?php
-              for ($i = 0; $i < count($data); $i++) { ?>
+              <?php $index = 0; ?>
+              <?php foreach ($data as $item) : ?>
                 <tr>
-                  <td><?php echo $i + 1 ?></td>
-                  <td><?php echo $data[$i]['id'] ?></td>
-                  <td><?php echo $data[$i]['name'] ?></td>
-                  <td><?php echo $data[$i]['username'] ?></td>
+                  <td><?php echo $index + 1 ?></td>
+                  <td><?php echo $item['id'] ?></td>
+                  <td><?php echo $item['name'] ?></td>
+                  <td><?php echo $item['username'] ?></td>
                   <td>
-                    <?php if ($data[$i]['role'] == 0) : ?>
+                    <?php if ($item['role_id'] == 0) : ?>
                       Người dùng
-                    <?php elseif ($data[$i]['role'] == 2) :  ?>
+                    <?php elseif ($item['role_id'] == 2) :  ?>
                       Người bán hàng
                     <?php endif  ?>
 
                   </td>
 
-                  <td><?php echo $data[$i]['addr'] ?></td>
-                  <td><?php echo $data[$i]['phone'] ?></td>
-                  <td><?php echo $data[$i]['email'] ?></td>
-                  <td><?php echo $data[$i]['createttime'] ?></td>
+                  <td><?php echo $item['addr'] ?></td>
+                  <td><?php echo $item['phone'] ?></td>
+                  <td>
+                    <?php if ($item['status_user'] == 1) : ?>
+                      Hoạt động
+                    <?php elseif ($item['status_user'] == 0) :  ?>
+                      Không hoạt động
+                    <?php endif  ?>
+
+                  </td>
+
+                  <td><?php echo $item['create_time'] ?></td>
                   <td class="text-center">
-                    <span class="btn btn-danger btn-sm delBtn" data-id="<?php echo $data[$i]['id'] ?>">Xóa</span>
+                    <?php if ($item['status_user'] == 1) : ?>
+                      <span class="btn btn-danger btn-sm delBtn" data-id="<?php echo $item['id'] ?>">Xóa</span>
+                    <?php elseif ($item['status_user'] == 0) :  ?>
+                      <span class="btn btn-danger btn-sm delBtn" data-id="<?php echo $item['id'] ?>">Mở</span>
+                    <?php endif  ?>
+
                   </td>
                 </tr>
-              <?php }
-              ?>
+              <?php endforeach; ?>
+
             </tbody>
           </table>
         </div>
@@ -146,8 +156,9 @@
 <script>
   $('.delBtn').on('click', function() {
     var cf = confirm('Bạn chắc chán xoá chưa');
+    console.log($(this).data('id'));
     if (cf) {
-      action('del', $(this).data('id'));
+      delAcc($(this).data('id'));
     }
   })
   $('#addBtn').click(function() {
@@ -182,11 +193,10 @@
       }
     };
     $.ajax({
-      url: 'member/action',
+      url: 'member/createAccount',
       type: 'POST',
       dataType: 'text',
       data: {
-        name,
         id,
         userNa,
         username,
@@ -197,9 +207,34 @@
         role
       },
       success: function(result) {
+        // console.log(result);
         location.reload();
 
       }
+    })
+
+
+
+
+
+  }
+
+  function delAcc(id) {
+    $.ajax({
+      url: 'member/delAccount',
+      type: 'POST',
+      dataType: 'text',
+      data: {
+        id,
+      },
+      success: function(result) {
+
+        alert(result);
+        location.reload();
+
+      }
+
+
     })
   }
 </script>

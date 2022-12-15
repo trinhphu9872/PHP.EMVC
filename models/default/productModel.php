@@ -23,11 +23,18 @@ class productModel extends Model
 	}
 	function getPrdById($masp)
 	{
+		// if (isset($masp)) {
+		// 	# code...
+		// 	$masp = $_POST['masp'];
+		// }
 		$sql = "SELECT * FROM product WHERE masp = " . $masp;
+
 		$prd = array();
+
 		foreach ($this->conn->query($sql) as $row) {
 			$prd = $row;
 		}
+
 		return $prd;
 	}
 }

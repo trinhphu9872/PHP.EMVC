@@ -8,14 +8,14 @@ class memberModel extends Model
 	}
 	function getAllMembers()
 	{
-		return $mb = $this->select('*', 'user', 'role = 0 or role = 2', 'ORDER BY createttime DESC');
+		return $mb = $this->select('*', 'user', 'role_id = 0 or role_id = 2', 'ORDER BY create_time DESC');
 	}
 	function memberToday()
 	{
 		$now = new DateTime("", new DateTimeZone('ASIA/Ho_Chi_Minh'));
 		$today = $now->format('Y-m-d');
 		$beforeWeek = date("Y-m-d", strtotime("-1 week"));
-		$rs = $this->select('count(id) as newmem', 'user', "DATE(createttime) <= '" . $today . "' AND DATE(createttime) >= '" . $beforeWeek . "'");
+		$rs = $this->select('count(id) as newmem', 'user', "DATE(create_time) <= '" . $today . "' AND DATE(create_time) >= '" . $beforeWeek . "'");
 		return $rs[0]['newmem'];
 	}
 	function allMember()

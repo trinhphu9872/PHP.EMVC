@@ -5,84 +5,109 @@
  */
 class CategoryController extends Controller
 {
-
-	function __construct()
+	private $categoryE;
+	private  $defaultLink = "Location: http://192.168.2.67/PHP.EMVC/Admin/category";
+	public function __construct()
 	{
 		$this->folder = "admin";
 		if (!isset($_SESSION['admin'])) {
-			header("Location: http://localhost/WBH_MVC/indexadmin");
+			header("Location: http://192.168.2.67/PHP.EMVC/indexadmin");
 		}
-	}
-	function index()
-	{
 		require_once 'vendor/Model.php';
 		require_once 'models/admin/categoryModel.php';
-		$md = new categoryModel;
-		$data = $md->getAllCtgrs();
+		$this->categoryE = new categoryModel;
+		// init Alert
+
+	}
+	public function index()
+	{
+		$data = $this->categoryE->getAll();
+
 		$this->render('category', $data, 'DANH MỤC SẢN PHẨM', 'admin');
 	}
-	function action()
+
+	public function createCategory()
 	{
-		$actionName = $id = $cname = $ccountry = '';
-		if (isset($_GET['name'])) {
-			$actionName = $_GET['name'];
-		}
-		if (isset($_GET['id'])) {
-			$id = $_GET['id'];
-		}
-		require_once 'vendor/Model.php';
-		require_once 'models/admin/categoryModel.php';
-		$md = new categoryModel;
 
-		switch ($actionName) {
-			case 'add':
-				if (isset($_GET['cname'])) {
-					$cname = $_GET['cname'];
-				}
-				if (isset($_GET['ccountry'])) {
-					$ccountry = $_GET['ccountry'];
-				}
-				if ($cname == '') {
-					echo "Bạn chưa điền tên danh mục!";
-					return;
-				}
-				$data = [
-					'tendm' => '"' . $cname . '"',
-					'xuatsu' => '"' . $ccountry . '"'
-				];
-
-				if ($md->insert('category', array_values($data), array_keys($data)) == 1) {
-					echo "OK";
+		if ($this->checkPermission(array_key_first($_SESSION['admin']['Permission']),  'ADD_CATEGORY')) {
+			$data = [
+				'name_category' =>  '"' . $_POST["categoryName"] . '"',
+				'origin_category' =>  '"' . $_POST["categoryCountry"] . '"',
+			];
+			$check  = $this->categoryE->exe_query("SELECT name_category  FROM category WHERE name_category = " . $data['name_category']);
+			// print_r($check);
+			// echo $check;
+			if ($check == 1  && $data['name_category'] != '' && $data['origin_category'] != '') {
+				$target_dir = "public/images/" . $data['name_category'];
+				if (!file_exists($target_dir) && $this->categoryE->insert('category', array_values($data), array_keys($data)) == 1) {
+					$target_dir = "public/images/" . $_POST["categoryName"];
+					if (!file_exists($target_dir)) {
+						mkdir($target_dir, 0777, true);
+					}
+					header($this->defaultLink);
+					// $_SESSION["success"] = 'Thành công tạo category';
 				} else {
-					echo "không thêm vào categỏy";
+					header($this->defaultLink);
+					// $_SESSION["error"] = 'Không thể thêm category';
 				}
-				break;
+			} else {
+				header($this->defaultLink);
+				// $_SESSION["error"] = 'Khồng được để trống trường dữ liêu';
+			}
+		} else {
+			echo "Bạn không có quyền hạn sử dụng chức năng";
+		}
+	}
 
-			case 'del':
-				if ($md->delete('category', 'madm = ' . $id) == 1) {
-					echo "OK";
-				} else {
-					echo "</br> dính khoá ngoại sản phẩm  categỏy ";
-				}
-				break;
+	public function editCategory()
+	{
+		if ($this->checkPermission(array_key_first($_SESSION['admin']['Permission']),  'EDIT_CATEGORY')) {
+			$data = [
+				'name_category' =>  '' . $_POST["categoryName"] . '',
+				'origin_category' =>  '' . $_POST["categoryCountry"] . '',
 
-			case 'edit':
-				$c4edit = $n4edit = '';
-				$setRow = array('tendm', 'xuatsu');
-				if (isset($_GET['country4edit'])) {
-					$c4edit = $_GET['country4edit'];
-				}
-				if (isset($_GET['name4edit'])) {
-					$n4edit = $_GET['name4edit'];
-				}
-				$setVal = array($n4edit, $c4edit);
-				$md->update('category', $setRow, $setVal, 'madm = ' . $id);
-				echo "OK";
-				break;
+			];
+			// 'id' =>  '"' . $_POST["id"] . '"'
+			$check  = $this->categoryE->exe_query("SELECT name_category  FROM category WHERE id_category = " . $_POST["id"]);
+			// echo $check;
+			// print_r($check);
+			if ($check == 1 && $data['name_category'] != '' && $data['origin_category'] != '') {
+				// $target_dir = "public/images/" . $data['name_category'];
 
-			default:
-				# code...
-				break;
+				$target_dir = "public/images/" . $_POST["categoryName"];
+
+				if (!file_exists($target_dir)) {
+					mkdir($target_dir, 0777, true);
+				}
+				$this->categoryE->update('category',  array_keys($data), array_values($data), 'id_category = ' . $_POST["id"]);
+
+				// $_SESSION["success"] = 'Thành công sửa category';
+
+				header($this->defaultLink);
+				// $_SESSION["error"] = 'Không thể sửa category';
+
+			} else {
+
+				header($this->defaultLink);
+				// $_SESSION["error"] = 'Tổn tại từ khoá category';
+			}
+		} else {
+			echo "Bạn không có quyền hạn sử dụng chức năng";
+		}
+	}
+
+
+	public function deleteCategory()
+	{
+		if ($this->checkPermission(array_key_first($_SESSION['admin']['Permission']),  'DEL_CATEGORY')) {
+
+			if ($this->categoryE->delete('category', 'id_category = ' . $_POST['id']) == 1) {
+				echo 'OK';
+			} else {
+				echo "Xoá khoá ngoại không thành công : dính khoá ngoại sản phẩm  categỏy ";
+			}
+		} else {
+			echo "Bạn không có quyền hạn sử dụng chức năng";
 		}
 	}
 }

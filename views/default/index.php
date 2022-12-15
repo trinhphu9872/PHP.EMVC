@@ -8,7 +8,7 @@
 					<div class='product-container' onclick="Display_PrdDetail('<?php echo $data[$i]['masp'] ?>')">
 						<a data-toggle='modal' href='product/PrdDetail/<?php echo $data[$i]['masp'] ?>' data-target='#modal-id'>
 							<div style="text-align: center;" class='product-img'>
-								<img src='<?php echo $data[$i]['anhchinh'] ?>'>
+								<img src='<?= INDEX_URL ?><?php echo $data[$i]['anhchinh'] ?>'>
 							</div>
 							<div class='product-info'>
 								<h4><b><?php echo $data[$i]['tensp'] ?></b></h4>

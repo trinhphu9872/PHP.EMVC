@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Shin Shop | AdminPage</title>
-  <base href="/WBH_MVC/">
+  <base href="/PHP.EMVC/">
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
@@ -23,13 +23,6 @@
   <!-- AdminLTE Skins. Choose a skin from the css/skins
    folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="views/admin/AdminLTE/dist/css/skins/_all-skins.min.css">
-
-  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
 
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
@@ -54,7 +47,7 @@
     <header class="main-header">
 
       <!-- Logo -->
-      <a href="indexadmin/Dashboard" class="logo">
+      <a href="Admin/indexadmin/Dashboard" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini">Shin</span>
         <!-- logo for regular state and mobile devices -->
@@ -81,32 +74,7 @@
                 <li>
                   <!-- inner menu: contains the actual data -->
                   <ul class="menu">
-                    <li>
-                      <!-- <a href="#">
-                        <i class="fa fa-users text-aqua"></i> 5 new members joined today
-                      </a> -->
-                    </li>
-                    <li>
-                      <!-- <a href="#">
-                        <i class="fa fa-warning text-yellow"></i> Very long description here that may not fit into the
-                        page and may cause design problems
-                      </a> -->
-                    </li>
-                    <li>
-                      <!-- <a href="#">
-                        <i class="fa fa-users text-red"></i> 5 new members joined
-                      </a> -->
-                    </li>
-                    <li>
-                      <!-- <a href="#">
-                        <i class="fa fa-shopping-cart text-green"></i> 25 sales made
-                      </a> -->
-                    </li>
-                    <li>
-                      <!-- <a href="#">
-                        <i class="fa fa-user text-red"></i> You changed your username
-                      </a> -->
-                    </li>
+
                   </ul>
                 </li>
                 <!-- <li class="footer"><a href="#">View all</a></li> -->
@@ -115,25 +83,25 @@
             <!-- User Account: style can be found in dropdown.less -->
             <li class="dropdown user user-menu">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <img src="views/admin/AdminLTE/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                <img src="https://ecdn.game4v.com/g4v-content/uploads/2021/10/27072500/Sharingan-1-game4v-1635294299-10-e1635294382699.jpg" class="user-image" alt="User Image">
                 <span class="hidden-xs"><?php echo $_SESSION['admin']['username'] ?></span>
               </a>
               <ul class="dropdown-menu">
                 <!-- User image -->
                 <li class="user-header">
-                  <img src="views/admin/AdminLTE/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                  <img src="https://ecdn.game4v.com/g4v-content/uploads/2021/10/27072500/Sharingan-1-game4v-1635294299-10-e1635294382699.jpg" class="img-circle" alt="User Image">
 
                   <p>
-                    <?php echo $_SESSION['admin']['username'] ?> Web Developer
+                    <?php echo $_SESSION['admin']['username'] ?> Software Developer
                   </p>
                 </li>
                 <!-- Menu Footer-->
                 <li class="user-footer">
-                  <div class="pull-left">
+                  <!-- <div class="pull-left">
                     <a href="#" class="btn btn-default btn-flat">Profile</a>
-                  </div>
+                  </div> -->
                   <div class="pull-right">
-                    <a onclick="logout()" class="btn btn-default btn-flat">Sign out</a>
+                    <a href="Admin/indexAdmin/logout" class="btn btn-default btn-flat">Đăng xuất</a>
                   </div>
                 </li>
               </ul>
@@ -150,7 +118,7 @@
         <!-- Sidebar user panel -->
         <div class="user-panel">
           <div class="pull-left image">
-            <img src="views/admin/AdminLTE/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+            <img src="https://ecdn.game4v.com/g4v-content/uploads/2021/10/27072500/Sharingan-1-game4v-1635294299-10-e1635294382699.jpg" class="img-circle" alt="User Image">
           </div>
           <div class="pull-left info">
             <p><?php echo $_SESSION['admin']['username'] ?></p>
@@ -173,35 +141,48 @@
         <ul class="sidebar-menu" data-widget="tree">
           <li class="header">MAIN MENU</li>
           <li id="dbtab">
-            <a href="indexadmin/Dashboard">
+            <a href="Admin/indexadmin/Dashboard">
               <i class="fa fa-dashboard"></i> <span>Dashboard</span>
               <span class="pull-right-container">
               </span>
             </a>
           </li>
-          <li id="gdtab">
-            <a href="order">
+          <!-- <li id="gdtab">
+            <a href="Admin/order">
               <i class="fa fa-exchange"></i>
               <span>Giao dịch</span>
             </a>
-          </li>
+          </li> -->
           <li id="sptab">
-            <a href="productadmin">
+            <a href="Admin/productadmin">
               <i class="fa fa-th"></i> <span>Sản phẩm</span>
             </a>
           </li>
           <li id="dmsptab">
-            <a href="category">
+            <a href="Admin/category">
               <i class="fa fa-pie-chart"></i>
               <span>Danh mục sản phẩm</span>
             </a>
           </li>
-          <li id="tvtab">
-            <a href="member">
-              <i class="fa fa-user-circle"></i>
-              <span>Thành viên</span>
-            </a>
-          </li>
+
+          <?php if ($_SESSION['admin']['role_id'] == '1') : ?>
+            <li id="tvtab">
+              <a href="Admin/member">
+                <i class="fa fa-user-circle"></i>
+                <span>Thành viên</span>
+              </a>
+
+            </li>
+            <li>
+              <a href="Admin/permission">
+                <i class="fa fa-database"></i>
+                <span>Permission</span>
+              </a>
+            </li>
+          <?php elseif ($_SESSION['admin']['role_id'] == '2') :  ?>
+
+          <?php endif  ?>
+
           <li id="pttab">
             <!-- <a href="analytics">
               <i class="fa fa-bar-chart"></i> <span>Phân tích</span>
@@ -222,7 +203,9 @@
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
       <!-- Content Header (Page header) -->
+      <div>
 
+      </div>
       <!-- CONTEN HERE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
       <?php echo $content; ?>
       <!-- ~END CONTENT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   -->
@@ -237,17 +220,7 @@
   </div>
   <!-- ./wrapper -->
   <script>
-    function logout() {
-      $.ajax({
-        url: "indexadmin/logout",
-        type: "post",
-        dataType: "text",
-        data: {},
-        success: function(result) {
-          location.replace('http://localhost/WBH_MVC/indexadmin');
-        }
-      });
-    }
+
   </script>
 </body>
 

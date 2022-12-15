@@ -4,7 +4,7 @@
     <small>Version</small>
   </h1>
   <ol class="breadcrumb">
-    <li><a href="indexadmin/Dashboard"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li><a href="Admin/indexadmin/Dashboard"><i class="fa fa-dashboard"></i> Home</a></li>
     <li class="active">Dashboard</li>
   </ol>
 </section>
@@ -19,7 +19,7 @@
 
         <div class="info-box-content">
           <span class="info-box-text">GIAO DỊCH HÔM NAY</span>
-          <span class="info-box-number"><?php echo $data[0] ?></span>
+          <span class="info-box-number"><?php echo $data['orderToday'] ?></span>
         </div>
         <!-- /.info-box-content -->
       </div>
@@ -32,7 +32,7 @@
 
         <div class="info-box-content">
           <span class="info-box-text">THÀNH VIÊN MỚI</span>
-          <span class="info-box-number"><?php echo $data[1] ?></span>
+          <span class="info-box-number"><?php echo $data['memberToday'] ?></span>
         </div>
         <!-- /.info-box-content -->
       </div>
@@ -49,7 +49,7 @@
 
         <div class="info-box-content">
           <span class="info-box-text">TỔNG SẢN PHẨM</span>
-          <span class="info-box-number"><?php echo $data[2] ?></span>
+          <span class="info-box-number"><?php echo $data['product'] ?></span>
         </div>
         <!-- /.info-box-content -->
       </div>
@@ -62,7 +62,7 @@
 
         <div class="info-box-content">
           <span class="info-box-text">TỔNG THÀNH VIÊN</span>
-          <span class="info-box-number"><?php echo $data[3] ?></span>
+          <span class="info-box-number"><?php echo $data['member'] ?></span>
         </div>
         <!-- /.info-box-content -->
       </div>
